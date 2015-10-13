@@ -1,0 +1,282 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
+    title Docker
+
+    link(rel='stylesheet', type='text/css', href='styles/styles.css')
+
+    script.
+      if ('registerElement' in document
+        && 'createShadowRoot' in HTMLElement.prototype
+        && 'import' in document.createElement('link')
+        && 'content' in document.createElement('template')) {
+        // We're using a browser with native WC support!
+      } else {
+        document.write('<script src="x-gif/dist/platform.js"><\/script>')
+      }
+
+  body
+    article
+      section
+        .fullscreen(ui-fx="blur1")
+          x-gif(src="images/5-NapoleonDynamite.gif" fill stopped)
+        .content#intro
+          div.box.darken
+            h1: small Docker
+            h2: small For Developers
+            .mid by
+            .line
+              h4 Adam Eivy <span class="rotate">\[._.]/</span>
+                .me.center
+            audio#audio(controls,loop)
+              source(src="https://archive.org/download/DaftPunkTronLegacyEncomPartIi/DaftPunkTronLegacyEncomPartIi.ogg" type="audio/ogg")
+              source(src="https://archive.org/download/DaftPunkTronLegacyEncomPartIi/DaftPunkTronLegacyEncomPartIi.mp3" type="audio/mpeg")
+
+      section
+        .fullscreen(ui-fx="blur1")
+          x-gif(src="images/confused_lionking.gif" fill n-times="1" stopped)
+        .content
+          .box
+            h3 What's this about?
+            ul
+              li The problem
+              li The dream solution
+              li What Docker is and how it works
+              li Why you shouldn't have to care
+
+      section
+        .fullscreen.bluescreen
+          x-gif(src='images/bsod.gif' fill n-times="1" stopped)
+        .content
+          .box.darken
+            h2 The Problem
+            h3
+              code.language-css.cursor How do I setup a dev environment?
+            h3 (⊙.☉)7
+
+      section.content
+        h3 I think John knows...
+        h3 We used to have a shell script
+        h3 The README is outdated/empty
+        h3 You need two versions of Java/Ruby/Python
+        h3 Project A conflicts with Project B
+        h3 What is Nokogiri and why won't it compile?!
+
+      section
+        .fullscreen(ui-fx="blur1")
+          x-gif(src="images/wall.gif" fill n-times="3" stopped speed="1.4")
+        .content.wait-for-gif.darken
+          h1 Software Config
+          .mid is
+          h1 Painful
+
+      section
+        .fullscreen
+          x-gif(src="images/painful.gif" fill n-times="3" stopped)
+        .content.darken
+          .box
+            h3 Next Person
+            ul
+              li OSX / Windows versioned
+              li Java updated
+              li Node/NPM updated
+              li etc...
+            h3 ಠ_ಠ still doesn't work on my machine
+
+      section.fullscreen
+        .content
+          h2 And Production is Different!
+          .padblock
+        img.toast(src='images/developer.png')
+
+      section.fullscreen
+        img.fillh(src="images/dream.jpg")
+        .content.box
+          h2 The Dream
+          code.big.language-bash.
+            git clone git@github.com:$ORG/$PROJECT.git
+            cd $PROJECT
+            ./dev init
+          h3 \[._.]/ - go get a cup of coffee
+
+      section.content
+          .box
+            h3 Not Required!
+            ul
+              li Any prerequisite software (Java, Maven, NPM)
+              li Any prerequisite configuration
+              li Any prerequisite knowledge of the stack
+            h3 \[◕ ◡ ◕]/ - Happy DevOps!
+
+      section.content
+        .box
+          h3 End Result
+          ul
+            li Runs in a sandboxed environment
+            li I can use my own IDE
+            li same versions of software as everyone else
+            li same software as production
+          h3 <span class="spin">\[◕ ◡ ◕]/</span> - Happy Developers!
+
+
+      section.fullscreen
+        img.fillh(src='images/what_is_docker.png')
+        .content(data-bespoke-state='light')
+            h3
+              code.language-bash.cursor Enter Docker
+
+      section.content
+        h2 What is it?
+        ul
+          li Consistent Environment (Sandbox)
+          li Entire image is an artifact
+          li Versioned repo of image changes
+          li Everyone runs the same versions of deps!
+          li FAST!
+
+      section.content
+        h2 Creating a Base Image
+        h4: a(href='https://registry.hub.docker.com/u/atomantic/pm2').
+            Example
+
+        code.language-bash.
+            docker run -i centos:7 /bin/bash
+                yum update -y
+                rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+                yum install -y npm
+                npm install -g pm2
+                # need this for npm install
+                yum install -y make
+                exit
+            # use container hash
+            docker commit -m 'node.js and pm2' -a "Adam Eivy" 9b93f815330f atomantic/pm2
+            docker push atomantic/pm2
+
+      section.content
+        h2 Building the Container
+        h5 Dockerfile
+        code.language-bash.
+            FROM    atomantic/pm2:v2
+            # Bundle app source
+            ADD app /app
+            WORKDIR /app
+            # could run PROD on my dev machine :)
+            ENV APP_ENV DEV
+            EXPOSE 3000
+            CMD ["/app/exec"]
+        h4: code.language-bash.
+          docker build -t dockerized .
+
+      section.content
+        h2 Multiple Services
+        h4 docker-compose.yml
+        code.language-yaml.
+          web:
+            build: .
+            ports:
+             - "4103:3000"
+            volumes:
+             - ./app:/app
+            links:
+             - memcached
+          memcached:
+            image: memcached
+
+      section.fullscreen
+        img.fillh(src='images/tbox.jpg')
+        .content
+          .box.darken
+            h2 Tools and Terms
+            p.big Docker Engine
+            p.big Docker Swarm
+            p.big Docker Compose
+            p.big Docker Machine
+            p.big Docker Hub
+            p.big Docker Registry
+            p.big Dockerfile
+            p.big Vagrant/VirtualBox
+            p.big boot2docker
+            p.big containers
+            p.big images
+
+      section.content
+        h2 More Googling!!!
+        ul
+          li Why isn't <span class="alert alert-warning">docker-compose</span> using the env_file?
+          li Why can't I sync my volume to <span class="alert alert-danger">VirtualBox</span>?
+          li Why is <span class="alert alert-info">live-reload</span> not working?
+          li Docker updated and now the <span class="alert alert-danger">tools changed</span>...
+          li Why doesn't it work when I <span class="alert alert-warning">VPN</span>?
+          li etc...
+
+      section.content
+          h2 Nothing to do with my app...
+          h3 \(• ◡ •)/ - these problems are shared!
+
+      section
+        .fullscreen(ui-fx="blur1")
+          x-gif(src="images/wall.gif" fill n-times="1" stopped speed="1.4")
+        .content.wait-for-gif.darken
+          h2 wait...
+          h4: code.language-bash.cursor What happened to `dev init`?
+          h3 ಠ_ಠ
+
+      section.fullscreen
+        img.fillh(src="images/dream.jpg")
+        .content
+          .box
+            h2 Dockerization Generator
+            h5
+              code.language-bash.
+                npm install -g yo git://github.com/atomantic/generator-dockerize.git
+                yo dockerize
+
+      section.content
+        h2 Manages Docker, Not Your App!
+        ul
+          li Simple <span class="alert alert-info">bash</span> scripts!
+          li Idempotent software install
+          li App is configured in Dockerfile
+          li Port, name, etc, configured in <span class="alert alert-success">dev.config.sh</span>
+          li Automates solutions
+
+      section.content
+        h2 Simple Commands
+        h3: ul.nobullet
+          li: code.language-bash ./dev init
+          li: code.language-bash ./dev restart
+          li: code.language-bash ./dev shell
+          li: code.language-bash ./dev start
+          li: code.language-bash ./dev stop
+          li: code.language-bash ./dev test
+
+      section
+        .content
+          x-gif(src="images/dockerize.gif" n-times="1")
+
+      section
+        x-gif(src="images/devinit.gif" n-times="1")
+        .content.wait-for-gif.darken
+          h1 Automation
+          .mid is
+          h1 awesome
+
+      section
+        .fullscreen(ui-fx="blur1")
+          x-gif(src="images/applause.gif" fill ping-pong speed="0.6" stopped)
+        .content(data-bespoke-state='light')
+          div.box.darken
+            .mid Thanks!
+            .line
+              .me.center
+            h4 \[._.]/ Adam Eivy
+            h6 Slides:
+              a(href='http://bit.ly/atomantic_docker') &nbsp; bit.ly/atomantic_docker
+            h6 Generator:
+              a(href='https://github.com/atomantic/generator-dockerize') &nbsp; Yeoman Generator
+            small: a(href='#1') &nbsp; restart
+
+    script(src='scripts/scripts.js')
+    link(rel="import" href="x-gif/dist/x-gif.html")
