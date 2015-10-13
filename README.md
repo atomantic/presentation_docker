@@ -4,7 +4,7 @@
 
 ## View the Slides
 
-The slides are hosted on [github pages](http://bit.ly/atomantic_docker)
+The slides are hosted on [github pages](http://bit.ly/dockerize)
 
 or you can build the slides locally:
 
